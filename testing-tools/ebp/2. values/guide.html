@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Core Values Builder</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background: #f8f9fa;
+        margin: 0;
+        padding: 0;
+      }
+      .container {
+        max-width: 950px;
+        margin: 40px auto;
+        background: #fff;
+        border-radius: 8px;
+        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.07);
+        padding: 32px;
+      }
+      h1 {
+        color: #333;
+      }
+      h2 {
+        color: #007bff;
+        margin-top: 32px;
+      }
+      .intro {
+        font-size: 1.08em;
+        margin-bottom: 18px;
+        color: #444;
+      }
+      .section {
+        margin-bottom: 28px;
+      }
+      .group {
+        background: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        margin-bottom: 24px;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: flex-start;
+      }
+      .group-title {
+        font-weight: 600;
+        font-size: 1.2em;
+        color: #2563eb;
+        margin-bottom: 16px;
+        padding-bottom: 8px;
+        border-bottom: 2px solid #e5e7eb;
+        width: 100%;
+      }
+      .value-checkbox {
+        position: relative;
+        display: inline-block;
+        padding: 8px 12px;
+        border-radius: 6px;
+        transition: background-color 0.2s;
+        margin-right: 12px;
+        margin-bottom: 8px;
+        width: calc(33.33% - 12px); /* Make 3 columns, subtract margin */
+      }
+      @media (max-width: 900px) {
+        .value-checkbox {
+          width: calc(50% - 12px); /* 2 columns on medium screens */
+        }
+      }
+      @media (max-width: 600px) {
+        .value-checkbox {
+          width: 100%; /* Full width on mobile */
+        }
+      }
+      .value-checkbox:hover {
+        background-color: #f8fafc;
+      }
+      .value-label {
+        font-weight: 500;
+        margin-left: 8px;
+        cursor: pointer;
+        user-select: none; /* Prevent text selection when clicking */
+      }
+      .value-def {
+        font-size: 0.97em;
+        color: #555;
+        margin-left: 30px;
+        margin-bottom: 6px;
+      }
+      .add-own {
+        margin-top: 10px;
+      }
+      .add-own input {
+        padding: 12px;
+        border: 1px solid #e5e7eb;
+        border-radius: 6px;
+        font-size: 1rem;
+        width: 300px;
+        margin-right: 8px;
+      }
+      .values-output {
+        background: #f8fafc;
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
+        padding: 24px;
+        margin-top: 24px;
+        font-family: Arial, sans-serif;
+      }
+      button {
+        background: #2563eb;
+        color: white;
+        padding: 12px 24px;
+        border: none;
+        border-radius: 6px;
+        font-size: 1rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: background-color 0.2s;
+      }
+      button:hover {
+        background: #1d4ed8;
+      }
+      .alert {
+        border-radius: 6px;
+        padding: 12px 16px;
+        margin: 16px 0;
+        font-weight: 500;
+        color: #fff;
+        background: #f44336;
+        font-size: 1em;
+        display: none;
+      }
+      .alert.ok {
+        background: #dcfce7;
+        color: #166534;
+        border: 1px solid #bbf7d0;
+      }
+      @media (max-width: 700px) {
+        .container {
+          padding: 8px;
+        }
+        .value-def {
+          margin-left: 0;
+        }
+      }
+      .value-checkbox {
+        position: relative;
+        display: flex;
+        align-items: center;
+      }
+      .value-checkbox .tooltip {
+        visibility: hidden;
+        position: absolute;
+        left: 100%;
+        top: 50%;
+        transform: translateY(-50%);
+        background-color: #1e293b;
+        color: white;
+        padding: 8px 12px;
+        border-radius: 6px;
+        font-size: 0.875rem;
+        width: 250px;
+        margin-left: 12px;
+        z-index: 1;
+        opacity: 0;
+        transition: opacity 0.2s, visibility 0.2s;
+      }
+      .value-checkbox .tooltip::before {
+        content: '';
+        position: absolute;
+        left: -6px;
+        top: 50%;
+        transform: translateY(-50%);
+        border-width: 6px;
+        border-style: solid;
+        border-color: transparent #1e293b transparent transparent;
+      }
+      .value-checkbox:hover .tooltip {
+        visibility: visible;
+        opacity: 1;
+      }
+      .value-cards {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 20px;
+        margin-top: 20px;
+      }
+      .value-card {
+        background: white;
+        border-radius: 8px;
+        padding: 20px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+      .value-tag {
+        display: inline-block;
+        background: #2563eb;
+        color: white;
+        padding: 4px 12px;
+        border-radius: 16px;
+        font-weight: 500;
+        font-size: 0.9em;
+        margin-bottom: 16px;
+      }
+      .value-manifestation {
+        color: #4b5563;
+        font-style: italic;
+        line-height: 1.5;
+        position: relative;
+        padding-left: 32px;
+      }
+      .quote-icon {
+        position: absolute;
+        left: 0;
+        top: 0;
+        color: #93c5fd;
+      }
+      /* Update tooltip styles */
+      .tooltip {
+        position: absolute;
+        left: calc(100% + 12px);
+        top: 50%;
+        transform: translateY(-50%);
+        background: #1e293b;
+        color: white;
+        padding: 8px 12px;
+        border-radius: 6px;
+        font-size: 0.875rem;
+        width: 250px;
+        pointer-events: none;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.2s, visibility 0.2s;
+      }
+      .tooltip::before {
+        content: '';
+        position: absolute;
+        left: -6px;
+        top: 50%;
+        transform: translateY(-50%);
+        border-width: 6px;
+        border-style: solid;
+        border-color: transparent #1e293b transparent transparent;
+      }
+      .value-checkbox:hover .tooltip {
+        opacity: 1;
+        visibility: visible;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Core Values Builder</h1>
+      <div class="intro">
+        Core values aren’t just words on a wall-they’re the DNA of your company culture and a magnet
+        for people who’ll thrive on your team. When your values are clear and lived, they help you
+        attract candidates who “get it,” filter out those who don’t, and make it easier to build a
+        workplace everyone’s proud of.
+      </div>
+      <form id="valuesForm">
+        <div class="section">
+          <h2>Pick or Add Your Core Values</h2>
+          <div id="alert" class="alert"></div>
+          <div class="options-list" id="optionsList">
+            <!-- Values will be inserted here by JS -->
+          </div>
+          <div class="add-own">
+            <input type="text" id="customValue" placeholder="Add your own value" />
+            <button type="button" onclick="addCustomValue()">Add</button>
+          </div>
+        </div>
+        <button type="button" onclick="showValues()">Show My Core Values</button>
+      </form>
+      <div id="output" class="values-output" style="display: none"></div>
+    </div>
+    <script>
+      // Value definitions and manifestations
+      const valueManifest = {
+        Innovation: [
+          'Creating new ideas, methods, or products',
+          'You’ll work on groundbreaking projects and are encouraged to experiment.',
+        ],
+        Impact: [
+          'Making a real difference for users, the company, or society',
+          'See your code deployed by millions-real-world impact on healthcare.',
+        ],
+        Growth: [
+          'Constantly improving; focus on learning and advancement',
+          'We offer stretch assignments and invest in your career progression.',
+        ],
+        Learning: [
+          'Valuing knowledge expansion and skill development',
+          'Ongoing learning budget and regular tech talks for all employees.',
+        ],
+        Excellence: [
+          'High standards in work and outcomes',
+          'We expect world-class, high-quality deliverables from ourselves and teammates.',
+        ],
+        Purpose: [
+          'Clear mission for why the work matters',
+          'We exist to make climate solutions scalable and accessible.',
+        ],
+        'Customer focus': [
+          'Prioritizing user needs and satisfaction',
+          'Everything we do starts with our customer’s pain points.',
+        ],
+        'Mission-driven': [
+          'United behind a central cause or big vision',
+          'Help us redefine how the world learns-mission before everything.',
+        ],
+        Change: [
+          'Embracing transformation and challenging the status quo',
+          'Redefine the insurance industry-change is our constant.',
+        ],
+        Ambition: [
+          'Setting bold goals, striving for big outcomes',
+          'Set your sights high: we want to become the global leaders in biotech.',
+        ],
+        Collaboration: [
+          'Achieving together, sharing ideas, and building collectively',
+          'You’ll collaborate cross-functionally daily-teamwork is our superpower.',
+        ],
+        Teamwork: [
+          'Value unity, support, and being a strong team',
+          'Work side-by-side with passionate teammates on projects that span the globe.',
+        ],
+        Support: [
+          'Helping each other personally and professionally',
+          'Peer support programs and open door mentorship culture.',
+        ],
+        Belonging: [
+          'Everyone is welcome; you can be yourself',
+          'You’ll find affinity groups, ERGs, and inclusive policies that work for everyone.',
+        ],
+        Diversity: [
+          'Actively seeking many backgrounds and perspectives',
+          'We hire and grow talent from all walks of life-DEI is not a checkbox here.',
+        ],
+        Inclusion: [
+          'Involving and empowering every employee',
+          'Your opinion matters, regardless of seniority, background, or function.',
+        ],
+        Empathy: [
+          'Understanding and sharing others’ feelings',
+          'We listen deeply-to candidates, customers, and each other.',
+        ],
+        Respect: [
+          'Valuing all contributions and people equally',
+          'Feedback is always delivered constructively and with respect.',
+        ],
+        Openness: [
+          'Transparent, receptive, not closed or dogmatic',
+          'Feedback and ideas are shared openly across the org-transparency by default.',
+        ],
+        Trust: [
+          'Relying on others’ integrity, ability, and intentions',
+          'Flexible work is built on trust, not micromanagement.',
+        ],
+        Integrity: [
+          'Doing the right thing, even when no one is watching',
+          'We follow ethical hiring and business practices at every level.',
+        ],
+        Transparency: [
+          'Sharing information freely and honestly',
+          'Salary bands and promotion criteria are public to all employees.',
+        ],
+        Ownership: [
+          'Taking responsibility-no excuses, see things through',
+          'Own your project from idea through launch with full autonomy.',
+        ],
+        Accountability: [
+          'Being answerable for results',
+          'We set clear goals and hold ourselves to them-celebrating success and learning from misses.',
+        ],
+        Authenticity: [
+          'Encouraging people to be themselves',
+          'We celebrate your real personality; bring your true self to work.',
+        ],
+        Flexibility: [
+          'Offering and supporting variable ways of working',
+          'Set your own schedule and blend life and work in ways that suit you.',
+        ],
+        Agility: [
+          'Responding rapidly to change and new info',
+          'Pivot projects quickly when new data comes in or markets change.',
+        ],
+        'Psychological safety': [
+          'Safe to take risks, fail, and share openly',
+          'Team retros encourage all voices-no blame, just learning.',
+        ],
+        Empowerment: [
+          'Giving people agency and resources to own their work',
+          'You decide the best tools and approach for your build-no micromanagement.',
+        ],
+        Results: [
+          'Measuring achievement by outcomes not activity',
+          'Impact > input: we measure on results, not hours at your desk.',
+        ],
+        Performance: [
+          'Prioritizing high achievement and strong results',
+          'Consistent top performers are given fast-track roles and recognition.',
+        ],
+        Quality: [
+          'Delivering work of a high standard consistently',
+          'We never sacrifice quality for short-term gain.',
+        ],
+        Drive: [
+          'A relentless push for achievement',
+          'Go the extra mile-enthusiasm and energy define our teams.',
+        ],
+        Perseverance: [
+          'Never giving up, even with setbacks',
+          'Tough projects don’t scare us-we push through together.',
+        ],
+        Efficiency: [
+          'Achieving a lot with minimal waste or delay',
+          'Streamlined tools and lean processes to maximize your productivity.',
+        ],
+        Commitment: [
+          'Following through on promises and goals',
+          'We follow through on our word and support each other’s commitments.',
+        ],
+        Sustainability: [
+          'Concern for environment, long-term thinking',
+          'We evaluate all business decisions through a sustainability lens.',
+        ],
+        Community: [
+          'Building supportive relationships inside and outside',
+          'Monthly volunteering and strong pro bono partnerships in every region.',
+        ],
+        'Social responsibility': [
+          'Acting with societal and ethical awareness',
+          'We contribute a % of profits to community well-being initiatives.',
+        ],
+        'Well-being': [
+          'Prioritizing employee health and happiness',
+          'Unlimited sick days and wellness reimbursements come standard.',
+        ],
+        'Work-life balance': [
+          'Respect for time away from work and personal priorities',
+          'We never expect after-hours messages or weekend work.',
+        ],
+        'Continuous improvement': [
+          'Always seeking to be better',
+          'We run frequent feedback loops and retros for every project.',
+        ],
+        Curiosity: [
+          'Hunger for knowledge, always asking “why?”',
+          'Questioning the status quo is encouraged.',
+        ],
+        Creativity: [
+          'Fostering new ideas and different perspectives',
+          'Hackdays, brainstorms, and design sprints are part of the culture.',
+        ],
+        Courage: [
+          'Willingness to speak up, try new things, challenge status',
+          'We value respectful dissent and bold proposals.',
+        ],
+        Boldness: [
+          'Daring to take risks and make big bets',
+          'We don’t play it safe-moonshot thinking is rewarded here.',
+        ],
+        Candor: [
+          'Honest, direct communication',
+          'We share feedback with honesty and respect-no hidden agendas.',
+        ],
+        Fun: [
+          'Value a playful, joyful spirit',
+          'Company meme contests and Friday open mics are a thing here.',
+        ],
+        'Open-mindedness': [
+          'Welcome to new/different ideas and approaches',
+          'Propose crazy solutions-we don’t shoot them down out of hand.',
+        ],
+        Other: ['Add your own', 'Write your unique value here.'],
+      };
+
+      // Groupings
+      const valueGroups = [
+        {
+          name: 'Mission & Purpose',
+          values: [
+            'Innovation',
+            'Impact',
+            'Growth',
+            'Learning',
+            'Excellence',
+            'Purpose',
+            'Customer focus',
+            'Mission-driven',
+            'Change',
+            'Ambition',
+          ],
+        },
+        {
+          name: 'Teamwork & People',
+          values: [
+            'Collaboration',
+            'Teamwork',
+            'Support',
+            'Belonging',
+            'Diversity',
+            'Inclusion',
+            'Empathy',
+            'Respect',
+            'Openness',
+            'Trust',
+          ],
+        },
+        {
+          name: 'Culture & Environment',
+          values: [
+            'Integrity',
+            'Transparency',
+            'Ownership',
+            'Accountability',
+            'Authenticity',
+            'Flexibility',
+            'Agility',
+            'Psychological safety',
+            'Empowerment',
+          ],
+        },
+        {
+          name: 'Performance & Drive',
+          values: [
+            'Results',
+            'Performance',
+            'Quality',
+            'Drive',
+            'Perseverance',
+            'Efficiency',
+            'Commitment',
+          ],
+        },
+        {
+          name: 'Modern Values & ESG',
+          values: [
+            'Sustainability',
+            'Community',
+            'Social responsibility',
+            'Well-being',
+            'Work-life balance',
+            'Continuous improvement',
+            'Curiosity',
+            'Creativity',
+          ],
+        },
+        {
+          name: 'Candor & Risk',
+          values: ['Courage', 'Boldness', 'Candor'],
+        },
+        {
+          name: 'Wildcard',
+          values: ['Fun', 'Open-mindedness', 'Other'],
+        },
+      ];
+
+      function renderValues() {
+        const optionsList = document.getElementById('optionsList');
+        optionsList.innerHTML = '';
+        valueGroups.forEach((group) => {
+          const groupDiv = document.createElement('div');
+          groupDiv.className = 'group';
+
+          const groupTitle = document.createElement('div');
+          groupTitle.className = 'group-title';
+          groupTitle.textContent = group.name;
+          groupDiv.appendChild(groupTitle);
+
+          group.values.forEach((val) => {
+            const checkboxDiv = document.createElement('div');
+            checkboxDiv.className = 'value-checkbox';
+
+            const checkbox = document.createElement('input');
+            checkbox.type = 'checkbox';
+            checkbox.name = 'coreValue';
+            checkbox.value = val;
+            checkbox.id = `value-${val.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`; // Add unique ID
+            checkbox.addEventListener('change', updateAlert);
+
+            const label = document.createElement('label');
+            label.className = 'value-label';
+            label.htmlFor = checkbox.id; // Link label to checkbox
+            label.textContent = val;
+
+            const tooltip = document.createElement('div');
+            tooltip.className = 'tooltip';
+            tooltip.textContent = valueManifest[val] ? valueManifest[val][0] : 'Custom value';
+
+            checkboxDiv.appendChild(checkbox);
+            checkboxDiv.appendChild(label);
+            checkboxDiv.appendChild(tooltip);
+
+            groupDiv.appendChild(checkboxDiv);
+          });
+
+          optionsList.appendChild(groupDiv);
+        });
+      }
+
+      function addCustomValue() {
+        var input = document.getElementById('customValue');
+        var value = input.value.trim();
+        if (value) {
+          // Add to manifest with generic explainer if not already present
+          if (!valueManifest[value]) {
+            valueManifest[value] = [
+              'Custom value',
+              'Describe how this value shows up in your workplace.',
+            ];
+          }
+          // Add to Wildcard group
+          const optionsList = document.getElementById('optionsList');
+          const groups = optionsList.getElementsByClassName('group');
+          let wildcardGroup = null;
+          for (let g of groups) {
+            if (g.querySelector('.group-title').textContent === 'Wildcard') {
+              wildcardGroup = g;
+              break;
+            }
+          }
+          if (wildcardGroup) {
+            const checkboxDiv = document.createElement('div');
+            checkboxDiv.className = 'value-checkbox';
+            const checkbox = document.createElement('input');
+            checkbox.type = 'checkbox';
+            checkbox.name = 'coreValue';
+            checkbox.value = value;
+            checkbox.checked = true;
+            checkbox.addEventListener('change', updateAlert);
+            const label = document.createElement('span');
+            label.className = 'value-label';
+            label.textContent = value;
+            checkboxDiv.appendChild(checkbox);
+            checkboxDiv.appendChild(label);
+            wildcardGroup.appendChild(checkboxDiv);
+
+            // Only show definition under checkbox
+            const defDiv = document.createElement('div');
+            defDiv.className = 'value-def';
+            defDiv.innerHTML = valueManifest[value][0];
+            wildcardGroup.appendChild(defDiv);
+          }
+          input.value = '';
+          updateAlert();
+        }
+      }
+
+      function updateAlert() {
+        var checked = document.querySelectorAll('input[name="coreValue"]:checked').length;
+        var alert = document.getElementById('alert');
+        if (checked < 3) {
+          alert.style.display = 'block';
+          alert.className = 'alert';
+          alert.textContent = 'Pick at least 3 core values.';
+        } else if (checked > 6) {
+          alert.style.display = 'block';
+          alert.className = 'alert';
+          alert.textContent = 'Try to keep it to 3-6 core values for best results.';
+        } else {
+          alert.style.display = 'block';
+          alert.className = 'alert ok';
+          alert.textContent = "Great! You've picked a solid number of core values.";
+        }
+      }
+
+      document.addEventListener('DOMContentLoaded', function () {
+        renderValues();
+        updateAlert();
+      });
+
+      function showValues() {
+        var checked = Array.from(document.querySelectorAll('input[name="coreValue"]:checked')).map(
+          (cb) => cb.value,
+        );
+        var output = document.getElementById('output');
+
+        if (checked.length === 0) {
+          output.style.display = 'block';
+          output.textContent = 'Please select or add at least one core value.';
+          return;
+        }
+
+        let html = `<h3>Your Core Values & How They Show Up</h3>`;
+        html += `<div class="value-cards">`;
+
+        checked.forEach((val) => {
+          html += `
+            <div class="value-card">
+              <div class="value-tag">${val}</div>
+              <div class="value-manifestation">
+                <svg class="quote-icon" viewBox="0 0 24 24" width="24" height="24">
+                  <path d="M14,17H17L19,13V7H13V13H16M6,17H9L11,13V7H5V13H8L6,17Z" fill="currentColor"/>
+                </svg>
+                ${
+                  valueManifest[val]
+                    ? valueManifest[val][1]
+                    : 'Describe how this value shows up in your workplace.'
+                }
+              </div>
+            </div>
+          `;
+        });
+
+        html += `</div>`;
+        output.style.display = 'block';
+        output.innerHTML = html;
+      }
+    </script>
+  </body>
+</html>

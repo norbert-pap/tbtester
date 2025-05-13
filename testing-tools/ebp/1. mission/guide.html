@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Purpose and Mission Ad-Lib Form</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+        background: #f9f9f9;
+      }
+      h1 {
+        color: #333;
+      }
+      form {
+        background: #fff;
+        padding: 24px;
+        border-radius: 8px;
+        max-width: 650px;
+        margin: auto;
+        box-shadow: 0 0 12px rgba(0, 0, 0, 0.08);
+      }
+      .section {
+        margin-bottom: 24px;
+      }
+      label {
+        display: block;
+        margin-top: 12px;
+        font-weight: bold;
+      }
+      input[type='text'] {
+        width: 100%;
+        padding: 7px;
+        margin-top: 5px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+      }
+      .example {
+        font-style: italic;
+        color: #666;
+        font-size: 0.92em;
+        margin-top: 3px;
+      }
+      button {
+        margin-top: 18px;
+        padding: 10px 18px;
+        background: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 4px;
+        font-size: 1em;
+        cursor: pointer;
+      }
+      button:hover {
+        background: #0056b3;
+      }
+      .output {
+        margin-top: 28px;
+        background: #e9ecef;
+        padding: 18px;
+        border-radius: 6px;
+        font-family: monospace;
+        white-space: pre-wrap;
+      }
+      .inputs-row {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+      .inputs-row label {
+        font-weight: normal;
+        margin-top: 0;
+      }
+      .inputs-row input {
+        flex: 1 1 0;
+        min-width: 120px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Define Your Company Purpose and Mission</h1>
+    <form id="missionForm" autocomplete="off">
+      <!-- Structure 1 -->
+      <div class="section">
+        <div>
+          <strong
+            >1. Our purpose is to <span style="color: #007bff">[verb/goal]</span>
+            <span style="color: #007bff">[target audience/world/industry]</span> by
+            <span style="color: #007bff">[how/what you do]</span>.</strong
+          >
+        </div>
+        <div class="inputs-row">
+          <label for="s1verb">[verb/goal]</label>
+          <input type="text" id="s1verb" placeholder="e.g. empower" />
+          <label for="s1target">[target audience/world/industry]</label>
+          <input type="text" id="s1target" placeholder="e.g. small businesses" />
+          <label for="s1how">[how/what you do]</label>
+          <input type="text" id="s1how" placeholder="e.g. providing easy-to-use financial tools" />
+        </div>
+        <div class="example">
+          Example: Our purpose is to <b>empower</b> <b>small businesses</b> by
+          <b>providing easy-to-use financial tools</b>.
+        </div>
+      </div>
+      <!-- Structure 2 -->
+      <div class="section">
+        <div>
+          <strong
+            >2. We exist to <span style="color: #007bff">[verb/goal]</span> so that
+            <span style="color: #007bff">[desired impact/outcome]</span>.</strong
+          >
+        </div>
+        <div class="inputs-row">
+          <label for="s2verb">[verb/goal]</label>
+          <input
+            type="text"
+            id="s2verb"
+            placeholder="e.g. create affordable healthcare solutions"
+          />
+          <label for="s2impact">[desired impact/outcome]</label>
+          <input type="text" id="s2impact" placeholder="e.g. everyone can access quality care" />
+        </div>
+        <div class="example">
+          Example: We exist to <b>create affordable healthcare solutions</b> so that
+          <b>everyone can access quality care</b>.
+        </div>
+      </div>
+      <!-- Structure 3 -->
+      <div class="section">
+        <div>
+          <strong
+            >3. We’re on a mission to <span style="color: #007bff">[verb/goal]</span> for
+            <span style="color: #007bff">[audience/beneficiary]</span>,
+            <span style="color: #007bff">[how/why]</span>.</strong
+          >
+        </div>
+        <div class="inputs-row">
+          <label for="s3verb">[verb/goal]</label>
+          <input type="text" id="s3verb" placeholder="e.g. simplify travel" />
+          <label for="s3aud">[audience/beneficiary]</label>
+          <input type="text" id="s3aud" placeholder="e.g. families" />
+          <label for="s3how">[how/why]</label>
+          <input
+            type="text"
+            id="s3how"
+            placeholder="e.g. making every trip stress-free and memorable"
+          />
+        </div>
+        <div class="example">
+          Example: We’re on a mission to <b>simplify travel</b> for <b>families</b>,
+          <b>making every trip stress-free and memorable</b>.
+        </div>
+      </div>
+      <button type="button" onclick="generateStatements()">Generate Mission Statements</button>
+    </form>
+
+    <div id="output" class="output" style="display: none"></div>
+
+    <script>
+      function generateStatements() {
+        // Get values for Structure 1
+        const s1verb = document.getElementById('s1verb').value.trim();
+        const s1target = document.getElementById('s1target').value.trim();
+        const s1how = document.getElementById('s1how').value.trim();
+
+        // Structure 2
+        const s2verb = document.getElementById('s2verb').value.trim();
+        const s2impact = document.getElementById('s2impact').value.trim();
+
+        // Structure 3
+        const s3verb = document.getElementById('s3verb').value.trim();
+        const s3aud = document.getElementById('s3aud').value.trim();
+        const s3how = document.getElementById('s3how').value.trim();
+
+        let outputText = 'Your Draft Mission Statements:\n\n';
+        let filled = false;
+
+        if (s1verb || s1target || s1how) {
+          outputText +=
+            '1. Our purpose is to ' +
+            (s1verb ? s1verb : '[verb/goal]') +
+            ' ' +
+            (s1target ? s1target : '[target audience/world/industry]') +
+            ' by ' +
+            (s1how ? s1how : '[how/what you do]') +
+            '.\n';
+          filled = true;
+        }
+        if (s2verb || s2impact) {
+          outputText +=
+            '2. We exist to ' +
+            (s2verb ? s2verb : '[verb/goal]') +
+            ' so that ' +
+            (s2impact ? s2impact : '[desired impact/outcome]') +
+            '.\n';
+          filled = true;
+        }
+        if (s3verb || s3aud || s3how) {
+          outputText +=
+            '3. We’re on a mission to ' +
+            (s3verb ? s3verb : '[verb/goal]') +
+            ' for ' +
+            (s3aud ? s3aud : '[audience/beneficiary]') +
+            ', ' +
+            (s3how ? s3how : '[how/why]') +
+            '.\n';
+          filled = true;
+        }
+
+        if (!filled) {
+          outputText = 'Please fill out at least one set of fields above.';
+        }
+
+        const outputDiv = document.getElementById('output');
+        outputDiv.style.display = 'block';
+        outputDiv.textContent = outputText;
+      }
+    </script>
+  </body>
+</html>
